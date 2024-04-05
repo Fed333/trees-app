@@ -2,7 +2,7 @@ server:
   port: 5000
 spring:
   datasource:
-    url: jdbc:postgresql://db-hackaton-trees.cqokpt4nuw0j.eu-central-1.rds.amazonaws.com/db_hackaton_trees
+    url: jdbc:postgresql://${HACKATON_TREES_URL}/db_hackaton_trees
     username: postgres
     password: ${HACKATON_TREES_PASSWORD}
   jpa:
