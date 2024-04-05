@@ -47,4 +47,4 @@ web:
     host: ${WEB_FRONTEND_HOST}
 
 jwt:
-  secret: 4vesla
+  secret: ${JWT_SIGN_KEY}
