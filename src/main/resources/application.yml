@@ -7,7 +7,7 @@ spring:
     password: ${HACKATON_TREES_PASSWORD}
   jpa:
     generate-ddl: true
-    show-sql: true
+    show-sql: ${JPA_SHOW_SQL:false}
     open-in-view: false
     hibernate:
       ddl-auto: validate
