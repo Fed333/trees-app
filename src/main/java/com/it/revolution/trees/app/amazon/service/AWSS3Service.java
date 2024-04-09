@@ -35,6 +35,7 @@ public class AWSS3Service implements FileService {
             amazonS3Client.putObject(bucketName, key, file.getInputStream(), metadata );
             log.debug("File has been successfully uploaded.");
         } catch (Exception e) {
+            log.error("Couldn't upload the file.", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occupied while uploading the file");
         }
 
