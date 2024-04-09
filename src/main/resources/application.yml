@@ -25,6 +25,10 @@ spring:
             enable: true
         auth: true
 
+logging:
+  level:
+    com.it.revolution.trees.app: ${TREES_APP_LOG_LEVEL:ERROR}
+
 cloud:
   aws:
     credentials:

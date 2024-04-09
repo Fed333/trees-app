@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.it.revolution.trees.app.amazon.settings.AWSS3Settings;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -13,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AWSS3Service implements FileService {
@@ -22,6 +24,7 @@ public class AWSS3Service implements FileService {
 
     @Override
     public String uploadFile(MultipartFile file) {
+        log.debug("Uploading file...");
         String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
         String key = UUID.randomUUID() + "." + extension;
 
@@ -30,13 +33,16 @@ public class AWSS3Service implements FileService {
         String bucketName = settings.getBucket().getName();
         try {
             amazonS3Client.putObject(bucketName, key, file.getInputStream(), metadata );
+            log.debug("File has been successfully uploaded.");
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occupied while uploading the file");
         }
 
         amazonS3Client.setObjectAcl(bucketName, key, CannedAccessControlList.PublicRead);
 
-        return amazonS3Client.getResourceUrl(bucketName, key);
+        String resourceUrl = amazonS3Client.getResourceUrl(bucketName, key);
+        log.debug("File's resourceURL: {}", resourceUrl);
+        return resourceUrl;
     }
 
     @Override
