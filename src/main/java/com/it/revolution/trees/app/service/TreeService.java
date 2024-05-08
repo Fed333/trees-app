@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -85,5 +86,15 @@ public class TreeService {
         return created;
     }
 
+    @Transactional
+    public Optional<Tree> deleteTree(Long id) {
+        Optional<Tree> optionalTree = treeRepository.findById(id);
 
+        optionalTree.ifPresent(tree -> {
+            Optional.ofNullable(tree.getTasks()).ifPresent(assignedTreeTaskRepository::deleteAll);
+            treeRepository.delete(tree);
+        });
+
+        return optionalTree;
+    }
 }

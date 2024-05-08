@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,6 +48,24 @@ public class TreeController {
     public ResponseEntity<TreeDto> create(AddTreeRequestDto treeDto,
                                        @RequestParam(name = "photo", required = false) MultipartFile photo) {
         return ResponseEntity.ok(treeMapper.mapToDto(treeService.createTree(treeDto, photo)));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+
+
+        Optional<Tree> optionalTree = treeService.deleteTree(id);
+        if (optionalTree.isPresent()) {
+            Tree deleted = optionalTree.get();
+            return ResponseEntity.ok(Map.of(
+                    "message", "Successfully deleted tree with id " + id,
+                    "tree", treeMapper.mapToDto(deleted))
+            );
+        } else {
+            return ResponseEntity.ok(Map.of(
+                    "message", "No tree with id " + id + " was found.")
+            );
+        }
     }
 
 }
