@@ -2,12 +2,12 @@ server:
   port: 5000
 spring:
   datasource:
-    url: jdbc:postgresql://db-hackaton-trees.cqokpt4nuw0j.eu-central-1.rds.amazonaws.com/db_hackaton_trees
+    url: jdbc:postgresql://${HACKATON_TREES_URL}/trees_app_db
     username: postgres
     password: ${HACKATON_TREES_PASSWORD}
   jpa:
     generate-ddl: true
-    show-sql: true
+    show-sql: ${JPA_SHOW_SQL:false}
     open-in-view: false
     hibernate:
       ddl-auto: validate
@@ -24,6 +24,10 @@ spring:
           starttls:
             enable: true
         auth: true
+
+logging:
+  level:
+    com.it.revolution.trees.app: ${TREES_APP_LOG_LEVEL:ERROR}
 
 cloud:
   aws:
@@ -47,4 +51,4 @@ web:
     host: ${WEB_FRONTEND_HOST}
 
 jwt:
-  secret: 4vesla
+  secret: ${JWT_SIGN_KEY}
