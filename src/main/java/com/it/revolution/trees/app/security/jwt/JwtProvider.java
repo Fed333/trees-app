@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Date;
 
 @Slf4j
@@ -17,7 +19,7 @@ public class JwtProvider {
     private String jwtSecret;
 
     public String generateToken(String login) {
-        Date date = Date.from(LocalDate.now().plusDays(15).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date date = Date.from(LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.UTC));
         return Jwts.builder()
                 .setSubject(login)
                 .setExpiration(date)
