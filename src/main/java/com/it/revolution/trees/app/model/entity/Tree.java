@@ -41,7 +41,7 @@ public class Tree {
     @Column(name = "photo_url")
     private String photoUrl;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "tree")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "tree", cascade = CascadeType.ALL)
     private List<AssignedTreeTask> tasks;
 
 }

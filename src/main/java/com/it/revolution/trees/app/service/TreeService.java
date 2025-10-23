@@ -75,14 +75,15 @@ public class TreeService {
             String url = fileService.uploadFile(photo);
             tree.setPhotoUrl(url);
         }
+        List<AssignedTreeTask> assigned = Optional.ofNullable(treeDto).map(AddTreeRequestDto::getTasks)
+                .orElseGet(ArrayList::new)
+                .stream()
+                .map(t -> treeMapper.mapToEntity(t, tree))
+                .collect(Collectors.toList());
 
+        tree.setTasks(assigned);
         Tree created = treeRepository.save(tree);
 
-        if (nonNull(treeDto.getTasks())) {
-            List<AssignedTreeTask> assigned = treeDto.getTasks().stream().map(t -> treeMapper.mapToEntity(t, created)).collect(Collectors.toList());
-            assignedTreeTaskRepository.saveAll(assigned);
-            created.setTasks(assigned);
-        }
         return created;
     }
 
